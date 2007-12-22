@@ -12,7 +12,13 @@
 **	AUTHOR				Remon Spekreijse
 **
 **
+*************************************************************************************
+*
+*   add BOOL m_Action  2007-12-22 by Mrlong
+*
 */
+
+
 
 #ifndef __SERIALPORT_H__
 #define __SERIALPORT_H__
@@ -35,8 +41,11 @@ public:
 	virtual		~CSerialPort();
 
 	// port initialisation											
-	BOOL		InitPort(CWnd* pPortOwner, UINT portnr = 1, UINT baud = 19200, char parity = 'N', UINT databits = 8, UINT stopsbits = 1, DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512);
+	BOOL		InitPort(CWnd* pPortOwner, UINT portnr = 1, UINT baud = 19200, 
+		char parity = 'N', UINT databits = 8, UINT stopsbits = 1, 
+		DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512);
 
+	void        ClosePort(void);  // add by mrlong
 	// start/stop comm watching
 	BOOL		StartMonitoring();
 	BOOL		RestartMonitoring();
@@ -45,6 +54,7 @@ public:
 	DWORD		GetWriteBufferSize();
 	DWORD		GetCommEvents();
 	DCB			GetDCB();
+	BOOL        GetAction(void);  // add by mrlong
 
 	void		WriteToPort(char* string);
 
@@ -67,6 +77,7 @@ protected:
 	HANDLE				m_hComm;
 	HANDLE				m_hWriteEvent;
 
+
 	// Event array. 
 	// One element is used for each event. There are two event handles for each port.
 	// A Write event and a receive character event which is located in the overlapped structure (m_ov.hEvent).
@@ -86,6 +97,7 @@ protected:
 	char*				m_szWriteBuffer;
 	DWORD				m_dwCommEvents;
 	DWORD				m_nWriteBufferSize;
+	BOOL                m_Action;
 };
 
 #endif __SERIALPORT_H__

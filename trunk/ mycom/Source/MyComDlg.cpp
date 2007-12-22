@@ -100,6 +100,7 @@ BEGIN_MESSAGE_MAP(CMyComDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	ON_WM_SIZE()
 	ON_WM_CANCELMODE()
+	ON_BN_CLICKED(IDC_BTOPENCOM, OnBtOpenCom)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -203,6 +204,23 @@ void CMyComDlg::OnCancelMode()
 {
 	CDialog::OnCancelMode();
 	
+	
+	
+}
+
+void CMyComDlg::OnBtOpenCom() 
+{
+	// TODO: Add your control notification handler code here
+	// open com or close com
+	if (this->ComPort.GetAction())
+	{
+		this->ComPort.ClosePort();
+		CButton * myb = ((CButton *)this->GetDlgItem(IDC_BTOPENCOM));
+		
+	}
+	else {
+		this->ComPort.InitPort(this);
+	}
 	
 	
 }

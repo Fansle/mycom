@@ -38,6 +38,7 @@ CSerialPort::CSerialPort()
 	m_szWriteBuffer = NULL;
 
 	m_bThreadAlive = FALSE;
+	m_Action = FALSE;
 }
 
 //
@@ -106,7 +107,7 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 
 	if (m_szWriteBuffer != NULL)
 		delete [] m_szWriteBuffer;
-	m_szWriteBuffer = new char[writebuffersize];
+	m_szWriteBuffer = new char[writebuffersize]; //为什么事先定写缓存
 
 	m_nPortNr = portnr;
 
@@ -193,6 +194,8 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 	LeaveCriticalSection(&m_csCommunicationSync);
 
 	TRACE("Initialisation for communicationport %d completed.\nUse Startmonitor to communicate.\n", portnr);
+
+    m_Action = TRUE; // add by mrlong
 
 	return TRUE;
 }
@@ -634,6 +637,23 @@ DWORD CSerialPort::GetCommEvents()
 DWORD CSerialPort::GetWriteBufferSize()
 {
 	return m_nWriteBufferSize;
+}
+
+// add by mrlong
+BOOL CSerialPort::GetAction(void)
+{
+	return m_Action;
+}
+
+// add by mrlong
+void CSerialPort::ClosePort(void)
+{
+	if (m_hComm != NULL)
+	{
+		CloseHandle(m_hComm);
+		m_hComm = NULL;
+		m_Action = FALSE;
+	}
 }
 
 

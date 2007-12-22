@@ -103,6 +103,10 @@ SOURCE=.\MyComDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SerialPort.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -121,6 +125,10 @@ SOURCE=.\MyComDlg.h
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SerialPort.h
 # End Source File
 # Begin Source File
 

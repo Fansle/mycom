@@ -24,6 +24,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "SerialPort.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CMyComDlg dialog
 
@@ -33,6 +35,9 @@ class CMyComDlg : public CDialog
 public:
 	CMyComDlg(CWnd* pParent = NULL);	// standard constructor
 	
+	CSerialPort ComPort;  //串口类
+
+	/*参数*/
 	int m_Port     ;  //串口
 	int m_BaudRate ;  //波特率
 	int m_DataBits ;  //数据位
@@ -65,6 +70,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnCancelMode();
+	afx_msg void OnBtOpenCom();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
