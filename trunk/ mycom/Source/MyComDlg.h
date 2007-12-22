@@ -1,3 +1,19 @@
+/*
+*	myCom App 
+*   Http://mycom.googlecode.com
+*
+*   Main Dlg
+*  
+*   author: mrlong date:2007-12-22
+*	
+*   createdate: 2007-12-21
+*	last modification date 2007-12-22
+*	
+*   update:
+*  
+*
+*/
+
 // MyComDlg.h : header file
 //
 
@@ -16,6 +32,14 @@ class CMyComDlg : public CDialog
 // Construction
 public:
 	CMyComDlg(CWnd* pParent = NULL);	// standard constructor
+	
+	int m_Port     ;  //串口
+	int m_BaudRate ;  //波特率
+	int m_DataBits ;  //数据位
+	int m_Parity   ;  //校验位
+	int m_StopBits ;  //停止位
+
+	CComboBox myCombox;
 
 // Dialog Data
 	//{{AFX_DATA(CMyComDlg)
