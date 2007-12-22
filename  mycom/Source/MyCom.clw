@@ -53,8 +53,9 @@ Control5=IDC_STATIC,static,1342308352
 [DLG:IDD_MYCOM_DIALOG]
 Type=1
 Class=CMyComDlg
-ControlCount=3
+ControlCount=4
 Control1=IDCANCEL,button,1342242816
 Control2=IDC_STATIC,static,1342308352
 Control3=IDC_COMBOCOM,combobox,1344340226
+Control4=IDC_BTOPENCOM,button,1342242816
 
