@@ -1,3 +1,17 @@
+/*
+*	myCom App 
+*   Http://mycom.googlecode.com
+*  
+*   author: mrlong date:2007-12-22
+*	
+*   createdate: 2007-12-21
+*	last modification date 2007-12-22
+*	
+*   update:
+*  
+*
+*/
+
 // MyCom.h : main header file for the MYCOM application
 //
 

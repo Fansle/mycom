@@ -1,3 +1,19 @@
+/*
+*	myCom App 
+*   Http://mycom.googlecode.com
+*
+*   About Dlg
+*  
+*   author: mrlong date:2007-12-22
+*	
+*   createdate: 2007-12-21
+*	last modification date 2007-12-22
+*	
+*   update:
+*  
+*
+*/
+
 // MyComDlg.cpp : implementation file
 //
 
@@ -118,6 +134,10 @@ BOOL CMyComDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 	
 	// TODO: Add extra initialization here
+	
+	myCombox.SubclassDlgItem(IDC_COMBOCOM,this);
+	myCombox.AddString("COM1");
+	myCombox.AddString("COM2");
 	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }

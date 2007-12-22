@@ -93,6 +93,9 @@ CAPTION "MyCom串口调试"
 FONT 9, "宋体"
 BEGIN
     PUSHBUTTON      "退出",IDCANCEL,379,282,50,14
+    LTEXT           "串口=",IDC_STATIC,15,17,21,8
+    COMBOBOX        IDC_COMBOCOM,37,15,49,13,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
 END
 
 
