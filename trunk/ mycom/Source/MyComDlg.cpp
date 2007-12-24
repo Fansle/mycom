@@ -49,6 +49,7 @@ public:
 // Implementation
 protected:
 	//{{AFX_MSG(CAboutDlg)
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
@@ -68,7 +69,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
+	ON_WM_LBUTTONDOWN()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -85,13 +86,6 @@ CMyComDlg::CMyComDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMyComDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMyComDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
-}
 
 BEGIN_MESSAGE_MAP(CMyComDlg, CDialog)
 	//{{AFX_MSG_MAP(CMyComDlg)
@@ -127,6 +121,14 @@ BOOL CMyComDlg::OnInitDialog()
 			pSysMenu->AppendMenu(MF_SEPARATOR);
 			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 		}
+		//ÍøÖ·
+		CString strWeb;
+		strWeb.LoadString(IDS_WEB);
+		if (!strWeb.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_STRING, IDM_WEB, strWeb);
+		}
+
 	}
 
 	// Set the icon for this dialog.  The framework does this automatically
@@ -135,10 +137,6 @@ BOOL CMyComDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 	
 	// TODO: Add extra initialization here
-	
-	myCombox.SubclassDlgItem(IDC_COMBOCOM,this);
-	myCombox.AddString("COM1");
-	myCombox.AddString("COM2");
 	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -149,6 +147,10 @@ void CMyComDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	{
 		CAboutDlg dlgAbout;
 		dlgAbout.DoModal();
+	}
+	else if ((nID & 0xFFF0) == IDM_WEB)
+	{
+		MessageBox("web");
 	}
 	else
 	{
@@ -197,6 +199,7 @@ void CMyComDlg::OnSize(UINT nType, int cx, int cy)
 	CDialog::OnSize(nType, cx, cy);
 	
 	// TODO: Add your message handler code here
+	CButton * myB = (CButton * )GetDlgItem(IDCANCEL);
 	
 }
 
@@ -220,7 +223,17 @@ void CMyComDlg::OnBtOpenCom()
 	}
 	else {
 		this->ComPort.InitPort(this);
+
+		//this->ComPort.StartMonitoring();
 	}
 	
 	
+}
+
+void CAboutDlg::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	//CDialog::OnLButtonDown(nFlags, point);
+	CString myURL = "http://mycom.googlecode.com";
+	ShellExecute(NULL, _T("open"), myURL.operator LPCTSTR(), NULL, NULL, 2); // open web
 }

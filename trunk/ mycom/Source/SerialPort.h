@@ -45,7 +45,6 @@ public:
 		char parity = 'N', UINT databits = 8, UINT stopsbits = 1, 
 		DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512);
 
-	void        ClosePort(void);  // add by mrlong
 	// start/stop comm watching
 	BOOL		StartMonitoring();
 	BOOL		RestartMonitoring();
@@ -54,9 +53,12 @@ public:
 	DWORD		GetWriteBufferSize();
 	DWORD		GetCommEvents();
 	DCB			GetDCB();
-	BOOL        GetAction(void);  // add by mrlong
-
+	
 	void		WriteToPort(char* string);
+
+	BOOL        GetAction(void);           // add by mrlong
+	BOOL        KillThreadClosePort(void); // add by mrlong 2007-12-24
+	void        ClosePort(void);           // add by mrlong
 
 protected:
 	// protected memberfunctions
