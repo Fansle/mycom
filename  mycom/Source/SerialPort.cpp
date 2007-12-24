@@ -53,7 +53,22 @@ CSerialPort::~CSerialPort()
 
 	TRACE("Thread ended\n");
 
-	delete [] m_szWriteBuffer;
+	// add by mrlong
+	CloseHandle(m_ov.hEvent);
+	CloseHandle(m_hWriteEvent);
+	CloseHandle(m_hComm);
+	CloseHandle(m_hShutdownEvent);
+	
+	m_hComm = NULL;
+	m_ov.hEvent = NULL;
+	m_hWriteEvent = NULL;
+	m_hShutdownEvent = NULL;
+	
+	
+	if (m_szWriteBuffer != NULL)
+		delete [] m_szWriteBuffer;
+    // end
+	// delete [] m_szWriteBuffer;
 }
 
 //
@@ -68,8 +83,8 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 						   DWORD dwCommEvents,	// EV_RXCHAR, EV_CTS etc
 						   UINT  writebuffersize)	// size to the writebuffer
 {
-	assert(portnr > 0 && portnr < 5);
-	assert(pPortOwner != NULL);
+	assert(portnr > 0 && portnr < 5);  //串口只支持 COM1 ,COM2 ,COM3 COM4 
+	assert(pPortOwner != NULL);        //这个说明不支持dll封装了
 
 	// if the thread is alive: Kill
 	if (m_bThreadAlive)
@@ -654,6 +669,18 @@ void CSerialPort::ClosePort(void)
 		m_hComm = NULL;
 		m_Action = FALSE;
 	}
+}
+
+// add by mrlng
+BOOL CSerialPort::KillThreadClosePort(void)
+{
+	if (m_hComm == NULL) return FALSE;
+	RestartMonitoring();
+	m_bThreadAlive = FALSE;
+	SetCommMask(m_hComm,m_dwCommEvents);
+	WaitForSingleObject(m_Thread->m_hThread,INFINITE);
+	m_Thread = NULL;
+	return TRUE;
 }
 
 

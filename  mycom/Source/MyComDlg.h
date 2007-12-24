@@ -38,25 +38,19 @@ public:
 	CSerialPort ComPort;  //串口类
 
 	/*参数*/
-	int m_Port     ;  //串口
-	int m_BaudRate ;  //波特率
-	int m_DataBits ;  //数据位
-	int m_Parity   ;  //校验位
-	int m_StopBits ;  //停止位
+	//int m_Port     ;  //串口
+	//int m_BaudRate ;  //波特率
+	//int m_DataBits ;  //数据位
+	//int m_Parity   ;  //校验位
+	//int m_StopBits ;  //停止位
 
-	CComboBox myCombox;
 
 // Dialog Data
 	//{{AFX_DATA(CMyComDlg)
 	enum { IDD = IDD_MYCOM_DIALOG };
-		// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMyComDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+
 
 // Implementation
 protected:
@@ -71,6 +65,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnCancelMode();
 	afx_msg void OnBtOpenCom();
+	afx_msg void OnCaptureChanged(CWnd *pWnd);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
