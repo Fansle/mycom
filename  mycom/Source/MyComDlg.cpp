@@ -93,8 +93,8 @@ BEGIN_MESSAGE_MAP(CMyComDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_SIZE()
-	ON_WM_CANCELMODE()
 	ON_BN_CLICKED(IDC_BTOPENCOM, OnBtOpenCom)
+	ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -137,7 +137,22 @@ BOOL CMyComDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 	
 	// TODO: Add extra initialization here
+	WINDOWPLACEMENT   WndStatus;  
+    CRect   rect;  
+	int nCmdShow;
+    rect.left     = AfxGetApp()->GetProfileInt("WNDSTATUS","LEFT",100);  
+	rect.top      = AfxGetApp()->GetProfileInt("WNDSTATUS","TOP",100);  
+	rect.right    = AfxGetApp()->GetProfileInt("WNDSTATUS","RIGHT",500);  
+	rect.bottom   = AfxGetApp()->GetProfileInt("WNDSTATUS","BOTTOM",400);  
+	WndStatus.rcNormalPosition   =   rect;  
+	WndStatus.flags=   AfxGetApp()->GetProfileInt("WNDSTATUS","FLAG",0);  
+	nCmdShow   =   AfxGetApp()->GetProfileInt("WNDSTATUS","SHOWCMD",SW_SHOW);  
+	WndStatus.showCmd   =   nCmdShow;  
+	WndStatus.ptMinPosition   =   CPoint(0,0);  
+	SetWindowPlacement(&WndStatus);  
 	
+	m_ComAction = FALSE;
+	RefreshControl();
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -183,6 +198,15 @@ void CMyComDlg::OnPaint()
 	}
 	else
 	{
+	/*	CWnd * pWnd = GetDlgItem(IDC_BTOPENCOM);
+		CDC * pDC = pWnd->GetDC();
+		pWnd->Invalidate();
+		pWnd->UpdateWindow();
+		pDC->SelectStockObject(BLACK_BRUSH);
+		pDC->Rectangle(0,0,10,10);
+		pWnd->ReleaseDC(pDC);
+	*/
+
 		CDialog::OnPaint();
 	}
 }
@@ -199,35 +223,39 @@ void CMyComDlg::OnSize(UINT nType, int cx, int cy)
 	CDialog::OnSize(nType, cx, cy);
 	
 	// TODO: Add your message handler code here
-	CButton * myB = (CButton * )GetDlgItem(IDCANCEL);
-	
+	CButton * myB = (CButton * )GetDlgItem(IDC_BTSEND);
 }
 
-void CMyComDlg::OnCancelMode() 
-{
-	CDialog::OnCancelMode();
-	
-	
-	
-}
 
 void CMyComDlg::OnBtOpenCom() 
 {
 	// TODO: Add your control notification handler code here
 	// open com or close com
-	if (this->ComPort.GetAction())
+
+	if (m_ComAction)
 	{
-		this->ComPort.ClosePort();
+		CBitmap myBitmap;
+		myBitmap.LoadBitmap(IDB_BITMAPOPEN);
+		//m_ComPort.KillThreadClosePort();
+		//m_ComPort.StopMonitoring();
+		m_ComPort.ClosePort();
 		CButton * myb = ((CButton *)this->GetDlgItem(IDC_BTOPENCOM));
-		
+	    myb->SetWindowText(_T("打开串口"));
+		m_ComAction = FALSE;
 	}
 	else {
-		this->ComPort.InitPort(this);
+		CBitmap myBitmap;
+		myBitmap.LoadBitmap(IDB_BITMAPOPEN);
+		CStatic * myPic = (CStatic *)GetDlgItem(IDC_STATIC);
+		myPic->SetBitmap(myBitmap);
+		m_ComPort.InitPort(this,1,57600,'N',8,1);
+		m_ComPort.StartMonitoring();
+		CButton * myb = ((CButton *)GetDlgItem(IDC_BTOPENCOM));
+	    myb->SetWindowText(_T("关闭串口"));
+		m_ComAction = TRUE;
 
-		//this->ComPort.StartMonitoring();
 	}
-	
-	
+	RefreshControl();
 }
 
 void CAboutDlg::OnLButtonDown(UINT nFlags, CPoint point) 
@@ -236,4 +264,40 @@ void CAboutDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	//CDialog::OnLButtonDown(nFlags, point);
 	CString myURL = "http://mycom.googlecode.com";
 	ShellExecute(NULL, _T("open"), myURL.operator LPCTSTR(), NULL, NULL, 2); // open web
+}
+
+
+
+void CMyComDlg::OnClose() 
+{
+	// TODO: Add your message handler code here and/or call default
+	WINDOWPLACEMENT   WndStatus;  
+	GetWindowPlacement(&WndStatus);  
+	AfxGetApp()->WriteProfileInt("WNDSTATUS","FLAG",WndStatus.flags);  
+	AfxGetApp()->WriteProfileInt("WNDSTATUS","SHOWCMD",WndStatus.showCmd);  
+	AfxGetApp()->WriteProfileInt("WNDSTATUS","LEFT",WndStatus.rcNormalPosition.left);  
+	AfxGetApp()->WriteProfileInt("WNDSTATUS","RIGHT",WndStatus.rcNormalPosition.right);  
+	AfxGetApp()->WriteProfileInt("WNDSTATUS","TOP",WndStatus.rcNormalPosition.top);  
+	AfxGetApp()->WriteProfileInt("WNDSTATUS","BOTTOM",WndStatus.rcNormalPosition.bottom);  
+  
+	CDialog::OnClose();
+}
+
+void CMyComDlg::RefreshControl(void)
+{
+	// send botton
+	GetDlgItem(IDC_BTSEND)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_A)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_B)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_C)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_D)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_E)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_F)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_G)->EnableWindow(m_ComAction);
+	GetDlgItem(IDC_BTCOMMAND_H)->EnableWindow(m_ComAction);
+
+	// com param
+	GetDlgItem(IDC_CBCOM)->EnableWindow(!m_ComAction);
+	GetDlgItem(IDC_CBBaud)->EnableWindow(!m_ComAction);
+    //GetDlgItem(IDC_STATICCOMIMG)->VisielbWindow(!m_ComAction);
 }

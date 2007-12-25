@@ -21,22 +21,23 @@
 #define IDC_CHSENDHex                   1008
 #define IDC_EDITRECDATA                 1009
 #define IDC_CHrRECEIVEHex               1010
-#define IDC_BUTTON1                     1011
-#define IDC_BUTTON2                     1012
-#define IDC_BUTTON3                     1013
-#define IDC_BUTTON4                     1014
-#define IDC_BUTTON5                     1015
-#define IDC_BUTTON6                     1016
-#define IDC_BUTTON7                     1017
-#define IDC_BUTTON8                     1018
+#define IDC_BTCOMMAND_A                 1011
+#define IDC_BTCOMMAND_B                 1012
+#define IDC_BTCOMMAND_C                 1013
+#define IDC_BTCOMMAND_D                 1014
+#define IDC_BTCOMMAND_E                 1015
+#define IDC_BTCOMMAND_F                 1016
+#define IDC_BTCOMMAND_G                 1017
+#define IDC_BTCOMMAND_H                 1018
+#define IDC_STATICCOMIMG                1019
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        133
-#define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_COMMAND_VALUE         32773
+#define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

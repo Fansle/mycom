@@ -35,7 +35,7 @@ class CMyComDlg : public CDialog
 public:
 	CMyComDlg(CWnd* pParent = NULL);	// standard constructor
 	
-	CSerialPort ComPort;  //串口类
+	CSerialPort m_ComPort;  //串口类
 
 	/*参数*/
 	//int m_Port     ;  //串口
@@ -54,7 +54,8 @@ public:
 
 // Implementation
 protected:
-	HICON m_hIcon;
+	HICON  m_hIcon;
+	bool   m_ComAction; 
 
 	// Generated message map functions
 	//{{AFX_MSG(CMyComDlg)
@@ -63,11 +64,12 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnCancelMode();
 	afx_msg void OnBtOpenCom();
-	afx_msg void OnCaptureChanged(CWnd *pWnd);
+	afx_msg void OnClose();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+	void RefreshControl(void); 
 };
 
 //{{AFX_INSERT_LOCATION}}
