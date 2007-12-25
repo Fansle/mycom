@@ -38,7 +38,6 @@ CSerialPort::CSerialPort()
 	m_szWriteBuffer = NULL;
 
 	m_bThreadAlive = FALSE;
-	m_Action = FALSE;
 }
 
 //
@@ -53,22 +52,7 @@ CSerialPort::~CSerialPort()
 
 	TRACE("Thread ended\n");
 
-	// add by mrlong
-	CloseHandle(m_ov.hEvent);
-	CloseHandle(m_hWriteEvent);
-	CloseHandle(m_hComm);
-	CloseHandle(m_hShutdownEvent);
-	
-	m_hComm = NULL;
-	m_ov.hEvent = NULL;
-	m_hWriteEvent = NULL;
-	m_hShutdownEvent = NULL;
-	
-	
-	if (m_szWriteBuffer != NULL)
-		delete [] m_szWriteBuffer;
-    // end
-	// delete [] m_szWriteBuffer;
+	delete [] m_szWriteBuffer;
 }
 
 //
@@ -83,8 +67,8 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 						   DWORD dwCommEvents,	// EV_RXCHAR, EV_CTS etc
 						   UINT  writebuffersize)	// size to the writebuffer
 {
-	assert(portnr > 0 && portnr < 5);  //串口只支持 COM1 ,COM2 ,COM3 COM4 
-	assert(pPortOwner != NULL);        //这个说明不支持dll封装了
+	assert(portnr > 0 && portnr < 5);
+	assert(pPortOwner != NULL);
 
 	// if the thread is alive: Kill
 	if (m_bThreadAlive)
@@ -99,15 +83,18 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 	// create events
 	if (m_ov.hEvent != NULL)
 		ResetEvent(m_ov.hEvent);
-	m_ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	else
+		m_ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
 	if (m_hWriteEvent != NULL)
 		ResetEvent(m_hWriteEvent);
-	m_hWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	else
+		m_hWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	
 	if (m_hShutdownEvent != NULL)
 		ResetEvent(m_hShutdownEvent);
-	m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	else
+		m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
 	// initialize the event objects
 	m_hEventArray[0] = m_hShutdownEvent;	// highest priority
@@ -122,7 +109,7 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 
 	if (m_szWriteBuffer != NULL)
 		delete [] m_szWriteBuffer;
-	m_szWriteBuffer = new char[writebuffersize]; //为什么事先定写缓存
+	m_szWriteBuffer = new char[writebuffersize];
 
 	m_nPortNr = portnr;
 
@@ -209,8 +196,6 @@ BOOL CSerialPort::InitPort(CWnd* pPortOwner,	// the owner (CWnd) of the port (re
 	LeaveCriticalSection(&m_csCommunicationSync);
 
 	TRACE("Initialisation for communicationport %d completed.\nUse Startmonitor to communicate.\n", portnr);
-
-    m_Action = TRUE; // add by mrlong
 
 	return TRUE;
 }
@@ -344,18 +329,18 @@ UINT CSerialPort::CommThread(LPVOID pParam)
 		case 1:	// read event
 			{
 				GetCommMask(port->m_hComm, &CommEvent);
-				if (CommEvent & EV_CTS)
+				if (CommEvent & EV_CTS) //CTS信号状态发生变化
 					::SendMessage(port->m_pOwner->m_hWnd, WM_COMM_CTS_DETECTED, (WPARAM) 0, (LPARAM) port->m_nPortNr);
-				if (CommEvent & EV_RXFLAG)
+				if (CommEvent & EV_RXFLAG) //接收到事件字符，并置于输入缓冲区中 
 					::SendMessage(port->m_pOwner->m_hWnd, WM_COMM_RXFLAG_DETECTED, (WPARAM) 0, (LPARAM) port->m_nPortNr);
-				if (CommEvent & EV_BREAK)
+				if (CommEvent & EV_BREAK)  //输入中发生中断
 					::SendMessage(port->m_pOwner->m_hWnd, WM_COMM_BREAK_DETECTED, (WPARAM) 0, (LPARAM) port->m_nPortNr);
-				if (CommEvent & EV_ERR)
+				if (CommEvent & EV_ERR) //发生线路状态错误，线路状态错误包括CE_FRAME,CE_OVERRUN和CE_RXPARITY 
 					::SendMessage(port->m_pOwner->m_hWnd, WM_COMM_ERR_DETECTED, (WPARAM) 0, (LPARAM) port->m_nPortNr);
-				if (CommEvent & EV_RING)
+				if (CommEvent & EV_RING) //检测到振铃指示
 					::SendMessage(port->m_pOwner->m_hWnd, WM_COMM_RING_DETECTED, (WPARAM) 0, (LPARAM) port->m_nPortNr);
 				
-				if (CommEvent & EV_RXCHAR)
+				if (CommEvent & EV_RXCHAR) //接收到字符，并置于输入缓冲区中 
 					// Receive character event from port.
 					ReceiveChar(port, comstat);
 					
@@ -443,8 +428,9 @@ void CSerialPort::WriteChar(CSerialPort* port)
 	BOOL bResult = TRUE;
 
 	DWORD BytesSent = 0;
-
+	DWORD SendLen   = port->m_nWriteSize;
 	ResetEvent(port->m_hWriteEvent);
+
 
 	// Gain ownership of the critical section
 	EnterCriticalSection(&port->m_csCommunicationSync);
@@ -454,13 +440,14 @@ void CSerialPort::WriteChar(CSerialPort* port)
 		// Initailize variables
 		port->m_ov.Offset = 0;
 		port->m_ov.OffsetHigh = 0;
-
+     
 		// Clear buffer
 		PurgeComm(port->m_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
 
 		bResult = WriteFile(port->m_hComm,							// Handle to COMM Port
 							port->m_szWriteBuffer,					// Pointer to message buffer in calling finction
-							strlen((char*)port->m_szWriteBuffer),	// Length of message to send
+							SendLen,    // add by mrlong
+							//strlen((char*)port->m_szWriteBuffer),	// Length of message to send
 							&BytesSent,								// Where to store the number of bytes sent
 							&port->m_ov);							// Overlapped structure
 
@@ -509,7 +496,7 @@ void CSerialPort::WriteChar(CSerialPort* port)
 	} // end if (!bWrite)
 
 	// Verify that the data size send equals what we tried to send
-	if (BytesSent != strlen((char*)port->m_szWriteBuffer))
+	if (BytesSent != SendLen /*strlen((char*)port->m_szWriteBuffer)*/)  // add by 
 	{
 		TRACE("WARNING: WriteFile() error.. Bytes Sent: %d; Message Length: %d\n", BytesSent, strlen((char*)port->m_szWriteBuffer));
 	}
@@ -625,7 +612,7 @@ void CSerialPort::WriteToPort(char* string)
 
 	memset(m_szWriteBuffer, 0, sizeof(m_szWriteBuffer));
 	strcpy(m_szWriteBuffer, string);
-
+	m_nWriteSize=strlen(string); // add by mrlong
 	// set event for write
 	SetEvent(m_hWriteEvent);
 }
@@ -654,35 +641,48 @@ DWORD CSerialPort::GetWriteBufferSize()
 	return m_nWriteBufferSize;
 }
 
-// add by mrlong
-BOOL CSerialPort::GetAction(void)
+void CSerialPort::ClosePort()
 {
-	return m_Action;
-}
-
-// add by mrlong
-void CSerialPort::ClosePort(void)
-{
-	if (m_hComm != NULL)
+	do
 	{
-		CloseHandle(m_hComm);
-		m_hComm = NULL;
-		m_Action = FALSE;
-	}
+		SetEvent(m_hShutdownEvent);
+	} while (m_bThreadAlive);
+	CloseHandle(m_hComm);
 }
 
-// add by mrlng
-BOOL CSerialPort::KillThreadClosePort(void)
+void CSerialPort::WriteToPort(char* string,int n)
 {
-	if (m_hComm == NULL) return FALSE;
-	RestartMonitoring();
-	m_bThreadAlive = FALSE;
-	SetCommMask(m_hComm,m_dwCommEvents);
-	WaitForSingleObject(m_Thread->m_hThread,INFINITE);
-	m_Thread = NULL;
-	return TRUE;
+	assert(m_hComm != 0);
+	memset(m_szWriteBuffer, 0, sizeof(m_szWriteBuffer));
+	memcpy(m_szWriteBuffer, string, n);
+	m_nWriteSize = n;
+
+	// set event for write
+	SetEvent(m_hWriteEvent);
 }
 
+void CSerialPort::WriteToPort(LPCTSTR string)
+{
+	assert(m_hComm != 0);
+	memset(m_szWriteBuffer, 0, sizeof(m_szWriteBuffer));
+	strcpy(m_szWriteBuffer, string);
+	m_nWriteSize=strlen(string);
+	// set event for write
+	SetEvent(m_hWriteEvent);
+}
 
+void CSerialPort::WriteToPort(BYTE* Buffer, int n)
+{
+	assert(m_hComm != 0);
+	memset(m_szWriteBuffer, 0, sizeof(m_szWriteBuffer));
+	int i;
+	for(i=0; i<n; i++)
+	{
+		m_szWriteBuffer[i] = Buffer[i];
+	}
+	m_nWriteSize=n;
 
+	// set event for write
+	SetEvent(m_hWriteEvent);
+}
 

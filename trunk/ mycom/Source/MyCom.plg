@@ -6,6 +6,11 @@
 --------------------Configuration: MyCom - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x804 /fo"Debug/MyCom.res" /d "_DEBUG" /d "_AFXDLL" "D:\myCom\Source\MyCom.rc"" 
+Creating command line "link.exe /nologo /subsystem:windows /incremental:yes /pdb:"Debug/MyCom.pdb" /debug /machine:I386 /out:"Debug/MyCom.exe" /pdbtype:sept  .\Debug\MyCom.obj .\Debug\MyComDlg.obj .\Debug\SerialPort.obj .\Debug\StdAfx.obj .\Debug\MyCom.res "
+<h3>Output Window</h3>
+Compiling resources...
+Linking...
 
 
 

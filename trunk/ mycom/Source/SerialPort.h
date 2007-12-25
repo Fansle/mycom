@@ -12,13 +12,14 @@
 **	AUTHOR				Remon Spekreijse
 **
 **
-*************************************************************************************
-*
-*   add BOOL m_Action  2007-12-22 by Mrlong
-*
+************************************************************************************
+**  author: mrlong date:2007-12-25
+**
+**  改进
+**    1) 增加ClosePort
+**    2) 增加 writetoProt() 两个方法
+** 
 */
-
-
 
 #ifndef __SERIALPORT_H__
 #define __SERIALPORT_H__
@@ -42,8 +43,8 @@ public:
 
 	// port initialisation											
 	BOOL		InitPort(CWnd* pPortOwner, UINT portnr = 1, UINT baud = 19200, 
-		char parity = 'N', UINT databits = 8, UINT stopsbits = 1, 
-		DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512);
+				char parity = 'N', UINT databits = 8, UINT stopsbits = 1, 
+				DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512);
 
 	// start/stop comm watching
 	BOOL		StartMonitoring();
@@ -53,12 +54,13 @@ public:
 	DWORD		GetWriteBufferSize();
 	DWORD		GetCommEvents();
 	DCB			GetDCB();
-	
-	void		WriteToPort(char* string);
 
-	BOOL        GetAction(void);           // add by mrlong
-	BOOL        KillThreadClosePort(void); // add by mrlong 2007-12-24
-	void        ClosePort(void);           // add by mrlong
+	void		WriteToPort(char* string);
+	void        WriteToPort(char* string,int n); // add by mrlong 2007-12-25
+	void		WriteToPort(LPCTSTR string);     // add by mrlong 2007-12-25
+	void        WriteToPort(BYTE* Buffer, int n);// add by mrlong
+	void        ClosePort();                     // add by mrlong 2007-12-2  
+	
 
 protected:
 	// protected memberfunctions
@@ -75,10 +77,9 @@ protected:
 	BOOL				m_bThreadAlive;
 
 	// handles
-	HANDLE				m_hShutdownEvent;
-	HANDLE				m_hComm;
-	HANDLE				m_hWriteEvent;
-
+	HANDLE				m_hShutdownEvent;  //stop发生的事件
+	HANDLE				m_hComm;           // read  
+	HANDLE				m_hWriteEvent;     // write
 
 	// Event array. 
 	// One element is used for each event. There are two event handles for each port.
@@ -95,11 +96,12 @@ protected:
 	CWnd*				m_pOwner;
 
 	// misc
-	UINT				m_nPortNr;
+	UINT				m_nPortNr;        //?????
 	char*				m_szWriteBuffer;
 	DWORD				m_dwCommEvents;
 	DWORD				m_nWriteBufferSize;
-	BOOL                m_Action;
+
+	int                 m_nWriteSize; //add by mrlong 2007-12-25
 };
 
 #endif __SERIALPORT_H__
