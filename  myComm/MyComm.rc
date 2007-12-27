@@ -181,6 +181,7 @@ BEGIN
     COMBOBOX        IDC_CBSTOPBITS,45,83,48,30,CBS_DROPDOWN | CBS_SORT | 
                     WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "´ò¿ª´®¿Ú",IDC_BTOPENCOMM,45,105,50,14
+    CONTROL         131,IDC_BMPCOM,"Static",SS_BITMAP | SS_NOTIFY,25,107,9,9
 END
 
 
@@ -290,6 +291,14 @@ BEGIN
     0
 END
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAPCLOSECOM      BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+IDB_BITMAPOPENCOM       BITMAP  DISCARDABLE     "res\\bmp00001.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
