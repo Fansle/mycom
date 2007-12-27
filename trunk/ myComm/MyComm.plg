@@ -3,11 +3,80 @@
 <pre>
 <h1>Build Log</h1>
 <h3>
+--------------------Configuration: MyComm - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x804 /fo"Release/MyComm.res" /d "NDEBUG" /d "_AFXDLL" "D:\例子\VC\MyComm\MyComm.rc"" 
+Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP46F.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Release/MyComm.pch" /Yu"stdafx.h" /Fo"Release/" /Fd"Release/" /FD /c 
+"D:\例子\VC\MyComm\MainFrm.cpp"
+"D:\例子\VC\MyComm\MyComm.cpp"
+"D:\例子\VC\MyComm\MyCommDoc.cpp"
+"D:\例子\VC\MyComm\MyCommView.cpp"
+"D:\例子\VC\MyComm\SerialPort.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP46F.tmp" 
+Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP470.tmp" with contents
+[
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Release/MyComm.pch" /Yc"stdafx.h" /Fo"Release/" /Fd"Release/" /FD /c 
+"D:\例子\VC\MyComm\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP470.tmp" 
+Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP471.tmp" with contents
+[
+/nologo /subsystem:windows /incremental:no /pdb:"Release/MyComm.pdb" /machine:I386 /out:"Release/MyComm.exe" 
+".\Release\MainFrm.obj"
+".\Release\MyComm.obj"
+".\Release\MyCommDoc.obj"
+".\Release\MyCommView.obj"
+".\Release\SerialPort.obj"
+".\Release\StdAfx.obj"
+".\Release\MyComm.res"
+]
+Creating command line "link.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP471.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+MainFrm.cpp
+MyComm.cpp
+MyCommDoc.cpp
+MyCommView.cpp
+SerialPort.cpp
+Generating Code...
+Linking...
+MyCommView.obj : error LNK2001: unresolved external symbol "protected: void __thiscall CMyCommView::RefreshControl(void)" (?RefreshControl@CMyCommView@@IAEXXZ)
+Release/MyComm.exe : fatal error LNK1120: 1 unresolved externals
+Error executing link.exe.
+
+
+
+<h3>Results</h3>
+MyComm.exe - 2 error(s), 0 warning(s)
+<h3>
 --------------------Configuration: MyComm - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
 Creating command line "rc.exe /l 0x804 /fo"Debug/MyComm.res" /d "_DEBUG" /d "_AFXDLL" "D:\例子\VC\MyComm\MyComm.rc"" 
-Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP34E.tmp" with contents
+Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP473.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/MyComm.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\例子\VC\MyComm\MainFrm.cpp"
+"D:\例子\VC\MyComm\MyComm.cpp"
+"D:\例子\VC\MyComm\MyCommDoc.cpp"
+"D:\例子\VC\MyComm\MyCommView.cpp"
+"D:\例子\VC\MyComm\SerialPort.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP473.tmp" 
+Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP474.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/MyComm.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\例子\VC\MyComm\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP474.tmp" 
+Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP475.tmp" with contents
 [
 /nologo /subsystem:windows /incremental:yes /pdb:"Debug/MyComm.pdb" /debug /machine:I386 /out:"Debug/MyComm.exe" /pdbtype:sept 
 ".\Debug\MainFrm.obj"
@@ -18,9 +87,18 @@ Creating temporary file "C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP34E.tmp" with cont
 ".\Debug\StdAfx.obj"
 ".\Debug\MyComm.res"
 ]
-Creating command line "link.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP34E.tmp"
+Creating command line "link.exe @C:\DOCUME~1\lsy.LSD\LOCALS~1\Temp\RSP475.tmp"
 <h3>Output Window</h3>
 Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+MainFrm.cpp
+MyComm.cpp
+MyCommDoc.cpp
+MyCommView.cpp
+SerialPort.cpp
+Generating Code...
 Linking...
 
 

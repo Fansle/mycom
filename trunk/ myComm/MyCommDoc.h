@@ -25,6 +25,7 @@ protected: // create from serialization only
 // Attributes
 public:
 	CSerialPort m_Comm;
+	BOOL m_ComAction;
 	int m_intPort;  
 	int m_intBaudRate;
 	int m_intStopBits;

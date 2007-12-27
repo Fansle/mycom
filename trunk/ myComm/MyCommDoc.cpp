@@ -30,7 +30,7 @@ END_MESSAGE_MAP()
 CMyCommDoc::CMyCommDoc()
 {
 	// TODO: add one-time construction code here
-
+	m_ComAction = FALSE;
 }
 
 CMyCommDoc::~CMyCommDoc()

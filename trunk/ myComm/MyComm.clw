@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMyCommDoc
+LastClass=CMyCommView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "MyComm.h"
@@ -38,6 +38,9 @@ Type=0
 HeaderFile=MyCommView.h
 ImplementationFile=MyCommView.cpp
 Filter=D
+BaseClass=CFormView
+VirtualFilter=VWC
+LastObject=IDC_BMPCOM
 
 
 [CLS:CMainFrame]
@@ -106,7 +109,7 @@ CommandCount=13
 [DLG:IDD_MYCOMM_FORM]
 Type=1
 Class=CMyCommView
-ControlCount=25
+ControlCount=26
 Control1=IDC_STATIC,button,1342177287
 Control2=IDC_STATIC,button,1342177287
 Control3=IDC_STATIC,button,1342177287
@@ -132,4 +135,5 @@ Control22=IDC_STATIC,static,1342308352
 Control23=IDC_CBPARITY,combobox,1344340226
 Control24=IDC_CBSTOPBITS,combobox,1344340226
 Control25=IDC_BTOPENCOMM,button,1342242816
+Control26=IDC_BMPCOM,static,1342177550
 
